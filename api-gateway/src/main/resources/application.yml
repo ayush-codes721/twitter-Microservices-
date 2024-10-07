@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: follow-service
+          uri: lb://FOLLOW_SERVICE
+          predicates:
+            - Path=/follow/**
+          filters:
+            - name: AuthenticationGateWayFilter
+
+        - id: tweet-service
+          uri: lb://TWEET-SERVICE
+          predicates:
+            - Path=/tweet/**
+          filters:
+            - name: AuthenticationGateWayFilter
+
+        - id: comment-service
+          uri: lb://COMMENT-SERVICE
+          predicates:
+            - Path=/comment/**
+          filters:
+            - name: AuthenticationGateWayFilter
+
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+              - Path=/auth/**
+
+
+
+
+
+server:
+  port: 8000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
